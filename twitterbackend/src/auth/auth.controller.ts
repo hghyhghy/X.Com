@@ -1,22 +1,25 @@
 
-import { Body, Controller, Post , NotFoundException } from '@nestjs/common';
+
+
+import { Controller, Post, Body, NotFoundException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+
 @Controller('auth')
 export class AuthController {
-
-    constructor(private  readonly  authService:AuthService){}
+    constructor(private readonly authService: AuthService) {}
 
     @Post('register')
-    async register(@Body()  body: {email:string,  password:string,  username:string}){
-        return this.authService.register(body.email ,  body.password ,  body.username)
+    async register(@Body() Body){
+        return this.authService.register(Body.email,Body.password,Body.name)
     }
 
     @Post('login')
-    async  login(@Body() body:{username:string, password:string}){
-        const user  =  await this.authService.validateUSer(body.username , body.password)
+    async login(@Body() Body){
+        const user  =  await this.authService.validateuser(Body.name,Body.password)
         if(!user){
-            throw  new NotFoundException("Invalid Credentials")
+            throw new NotFoundException('Invalid credentials')
         }
-        return this.authService.login(body.username, body.password)
+
+        return this.authService.login(Body.name,Body.password)
     }
 }
