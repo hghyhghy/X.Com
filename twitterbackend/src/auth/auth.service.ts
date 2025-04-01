@@ -11,18 +11,17 @@ export class AuthService {
     async  hashPassword(password:string):Promise<string>{
         return  bcrypt.hash(password,10)
     }
-
-    async validateUSer(name:string,password:string):Promise<{id:number;username:string} | null>{
+    async validateuser(username:string,password:string):Promise<{id:number,username:string} | null>{
         const user  =  await this.prisma.user.findUnique({
-            where:{username:name}
+            where:{username}
         })
-
-        if(user &&(await bcrypt.compare(password,user.password))){
-            const {password ,...rest} = user
-            return rest;
+        if(user && (await bcrypt.compare(password,user.password))){
+            const {password,...rest} = user
+            return rest
         }
 
         return null
+
     }
 
     async login(name:string,password:string){
@@ -46,13 +45,7 @@ export class AuthService {
     }
 
     async register(email:string, password:string , name:string){
-        const existingUser  = await this.prisma.user.findUnique({
-            where:{email:email}
-        })
 
-        if(!existingUser){
-            throw new ConflictException("user with this id already exists ")
-        }
         const hashedPassword  =  await this.hashPassword(password)
         return this.prisma.user.create({
             data:{
