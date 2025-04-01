@@ -61,5 +61,17 @@ export class AuthService {
         })
     }
 
+    async  getUSerDetails(userId:number){
+        const user  =  await this.prisma.user.findUnique({
+            where:{id:userId},
+            select:{id:true,username:true,email:true}
+        })
+
+        if(!user){
+            throw new UnauthorizedException("user not found")
+        }
+        return user
+    }
+
 
 }
