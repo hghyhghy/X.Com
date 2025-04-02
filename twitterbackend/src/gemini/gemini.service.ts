@@ -2,7 +2,6 @@
 import * as dotenv from 'dotenv';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Injectable } from '@nestjs/common';
-import { json } from 'stream/consumers';
 
 dotenv.config()
 @Injectable()
@@ -37,14 +36,15 @@ export class GeminiService {
 
             const result  =  await model.generateContent(prompt)
             const response  =  await result.response
-            const text =  await response.text()
+            let text =  await response.text()
+            text =  text.replace(/```json/g, "").replace(/```/g, "").trim()
             const jsonData  =  JSON.parse(text)
             
-      return {
-        content: jsonData.content || "No content generated.",
-        links: jsonData.links || [],
-        hashtags: jsonData.hashtags || [],
-      };
+            return {
+                content: jsonData.content || "No content generated.",
+                links: jsonData.links || [],
+                hashtags: jsonData.hashtags || [],
+            };
         } catch (error) {
             throw new Error(`Gemini API request failed: ${error.message}`);
 
