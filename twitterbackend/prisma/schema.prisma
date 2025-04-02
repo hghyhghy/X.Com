@@ -19,6 +19,7 @@ model User{
   email String  @unique
   password String
   post Post[]
+  trendingtopic TrendingTopic[]
 }
 
 model Post {
@@ -29,5 +30,17 @@ model Post {
   hashtags  String?  // Hashtags in the post (optional)
   createdAt DateTime @default(now()) // When the post was created
   userId    Int      // User who created the post
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+
+model TrendingTopic {
+  id        Int      @id @default(autoincrement())
+  topic     String   @unique  // Trending topic name
+  posts     Int      // Number of posts related to the topic
+  createdAt DateTime @default(now()) // Timestamp of when it was generated
+
+  // Relation with User
+  userId    Int      // User who generated the topic
   user      User     @relation(fields: [userId], references: [id])
 }
