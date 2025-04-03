@@ -14,24 +14,29 @@ const predefinedTopics = ["For You", "Trending", "News", "Sports", "Entertainmen
 const Page = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const selectedTopic = pathname.split("/").pop()?.replace("-", "") || "";
+  const selectedTopic  = pathname.split("/").pop()?.replace("-", "") || "";
   const [preGeneratedPosts, setPreGeneratedPosts] = useState([]);
+  const [searchTopic, setSearchTopic] = useState(selectedTopic )
 
   useEffect(() => {
-    const fetchPreGeneratedPosts = async () => {
-      try {
-        const token = Cookies.get("token");
-        const response = await axios.get(`${API_URL}/explore/${selectedTopic}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setPreGeneratedPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching pre-generated posts:", error);
-      }
-    };
+      fetchPreGeneratedPosts()
+  }, [searchTopic]);
 
-    fetchPreGeneratedPosts();
-  }, [selectedTopic]);
+  const fetchPreGeneratedPosts = async () => {
+    if (!searchTopic) return; // Prevent fetching when searchTopic is empty
+
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.get(`${API_URL}/explore/${searchTopic}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPreGeneratedPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching pre-generated posts:", error);
+    }
+  };
+
+  
 
   const handleGeneratePost = async () => {
     if (!selectedTopic) return;
@@ -40,10 +45,10 @@ const Page = () => {
     try {
       await axios.post(
         `${API_URL}/explore/generate`,
-        { topic: selectedTopic },
+        { topic: searchTopic },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setPreGeneratedPosts([]);
+      fetchPreGeneratedPosts()
     } catch (error) {
       console.error("Error generating post:", error);
     }
@@ -68,10 +73,52 @@ const Page = () => {
           onNavigate={(path) => router.push(path)}
         />
       </div>
+      
 
       {/* Explore Section */}
       <div className="w-3/4 p-6">
-        <h2 className="text-3xl font-bold mb-4">{selectedTopic} Topics</h2>
+
+      <div className=" flex flex-row  gap-5 ">
+
+
+      <label className="relative flex items-center bg-[#181818] text-white px-4 py-2 rounded-md">
+  <svg className="h-5 w-5 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </g>
+  </svg>
+
+  <input
+    type="search"
+    className="bg-transparent text-sm  py-2 px-12 flex-grow text-white outline-none border-none focus:outline-none focus:ring-0 focus:border-transparent"
+    placeholder="Search"
+    value={searchTopic}
+    onChange={(e) => setSearchTopic(e.target.value)}
+    style={{
+      boxShadow: "none", // Explicitly remove any focus shadow
+      outline: "none", // Remove default outline
+      border: "none", // Ensure no border appears
+    }}
+  />
+
+  <kbd className="kbd kbd-sm bg-transparent border-none">⌘</kbd>
+  <kbd className="kbd kbd-sm bg-transparent border-none">K</kbd>
+</label>
+
+
+        <motion.div className="">
+          <motion.button
+            onClick={handleGeneratePost}
+            className="btn btn-primary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            >
+            Generate Post
+          </motion.button>
+        </motion.div>
+
+            </div>
 
         {/* Predefined Topics Tabs with Animation */}
         <motion.div className="flex space-x-6 border-b border-gray-700">
@@ -93,7 +140,7 @@ const Page = () => {
         </motion.div>
 
         {/* Display Pre-generated Posts with Smooth Transition */}
-        <h2 className="text-2xl font-bold mt-6">{selectedTopic} Posts</h2>
+        <h2 className="text-2xl font-bold mt-6">{searchTopic} </h2>
         <motion.div
           key={selectedTopic} // Re-run animation when topic changes
           initial={{ opacity: 0, y: 10 }}
@@ -116,7 +163,7 @@ const Page = () => {
                 </figure>
                 <div className="card-body">
                   <h2 className="card-title">
-                    {selectedTopic}
+                    {searchTopic}
                     <div className="badge badge-secondary">NEW</div>
                   </h2>
                   <p>{post.content}</p>
@@ -132,16 +179,7 @@ const Page = () => {
         </motion.div>
 
         {/* Generate Button with Animation */}
-        <motion.div className="mt-6">
-          <motion.button
-            onClick={handleGeneratePost}
-            className="btn btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Generate Post
-          </motion.button>
-        </motion.div>
+
       </div>
     </div>
   );
