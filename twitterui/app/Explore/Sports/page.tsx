@@ -78,7 +78,7 @@ const Page = () => {
       {/* Explore Section */}
       <div className="w-3/4 p-6">
 
-      <div className=" flex flex-row  gap-5 ">
+      <div className=" flex flex-row  gap-5 mb-3 ">
 
 
       <label className="relative flex items-center bg-[#181818] text-white px-4 py-2 rounded-md">
@@ -91,7 +91,7 @@ const Page = () => {
 
   <input
     type="search"
-    className="bg-transparent text-sm  py-2 px-12 flex-grow text-white outline-none border-none focus:outline-none focus:ring-0 focus:border-transparent"
+    className="bg-transparent text-sm  py-1 px-12 flex-grow text-white outline-none border-none focus:outline-none focus:ring-0 focus:border-transparent"
     placeholder="Search"
     value={searchTopic}
     onChange={(e) => setSearchTopic(e.target.value)}
@@ -108,13 +108,13 @@ const Page = () => {
 
 
         <motion.div className="">
-          <motion.button
-            onClick={handleGeneratePost}
-            className="btn btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            >
-            Generate Post
+          <motion .button 
+          className="btn btn-soft py-2"
+          onClick={handleGeneratePost}
+          
+          >Generate post
+
+
           </motion.button>
         </motion.div>
 
