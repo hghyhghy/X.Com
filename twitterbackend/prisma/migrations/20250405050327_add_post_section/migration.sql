@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `newstopic` ADD COLUMN `Posts` INTEGER NOT NULL DEFAULT 1111;
