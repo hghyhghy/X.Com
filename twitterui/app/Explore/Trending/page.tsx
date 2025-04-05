@@ -14,12 +14,12 @@ const Page = () => {
   const router = useRouter();
   const pathname = usePathname();
   const selectedTopic = pathname.split("/").pop()?.replace("-", "") || "";
-
+  const [searchTrending, setSearchTrending] = useState(selectedTopic)
   const [trendingTopic, setTrendingTopic] = useState([]);
 
   useEffect(() => {
     fetchTrendingTopic();
-  }, [selectedTopic]); // Fetch new data when topic changes
+  }, [searchTrending]); // Fetch new data when topic changes
 
   const fetchTrendingTopic = async () => {
     try {
@@ -36,7 +36,7 @@ const Page = () => {
   const handleGenerateTrending = async() =>{
       try {
         const token   =   Cookies.get('token')
-        await axios.post(`${API_URL}/trending/generate` , {topic:selectedTopic},{
+        await axios.post(`${API_URL}/trending/generate` , {topic:searchTrending},{
           headers:{Authorization:`Bearer ${token}`}
         } );
         fetchTrendingTopic()
@@ -68,13 +68,49 @@ const Page = () => {
 
   {/* ✅ Fixed Trending Section */}
   <div className="w-3/4 p-5 flex flex-col h-screen">
-    <h2 className="text-3xl font-bold mb-4">Trending Topics</h2>
+  <div className=" flex flex-row  gap-5  mb-3">
+
+
+<label className="relative flex items-center bg-[#181818] text-white px-4 py-2 rounded-md">
+        <svg className="h-5 w-5 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+        </g>
+        </svg>
+
+        <input
+        type="search"
+        className="bg-transparent text-sm  py-1 px-12 flex-grow text-white outline-none border-none focus:outline-none focus:ring-0 focus:border-transparent"
+        placeholder="Search"
+        value={searchTrending}
+        onChange={(e) => setSearchTrending(e.target.value)}
+        style={{
+        boxShadow: "none", // Explicitly remove any focus shadow
+        outline: "none", // Remove default outline
+        border: "none", // Ensure no border appears
+        }}
+        />
+
+        <kbd className="kbd kbd-sm bg-transparent border-none">⌘</kbd>
+        <kbd className="kbd kbd-sm bg-transparent border-none">K</kbd>
+</label>
+
+
+  <motion.div className="">
+    <motion .button 
+    className="btn btn-soft py-2"
+    onClick={handleGenerateTrending}
     
-    <div className="flex justify-end mb-4">
-      <button onClick={handleGenerateTrending} className="btn btn-primary">
-        Generate Trending Topics
-      </button>
-    </div>
+    >Generate post
+
+
+    </motion.button>
+  </motion.div>
+
+      </div>
+    
+
 
     {/* Topic Selector Tabs */}
     <div className="flex space-x-6 border-b border-gray-700">
@@ -112,7 +148,7 @@ const Page = () => {
               <span className=" text-gray-400">{index+1}   </span>.
               <h3 className=" text-gray-400">Trending</h3>
                 </div>
-              <h2 className="card-title text-xl font-bold">{topic.topic}</h2>
+              <h2 className="card-title text-1xl font-normal">{topic.topic}</h2>
               <p className="text-gray-400">{topic.posts} posts</p>
               </div>
               <div className="  relative right-0 ml-12">
