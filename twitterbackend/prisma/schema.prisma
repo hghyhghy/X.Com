@@ -50,6 +50,7 @@ model  NewsTopic{
   id  Int  @id  @default(autoincrement())
   topic String
   headlines Json
+  Posts Int  @default(1111)
   createdAt DateTime @default(now())
   userId    Int      // User who generated the news
   user      User     @relation(fields: [userId], references: [id])
