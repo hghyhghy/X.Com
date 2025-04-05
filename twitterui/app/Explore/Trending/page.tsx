@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { BsThreeDots } from "react-icons/bs";
 
 const API_URL = "http://localhost:3001";
-const predefinedTopics = ["For You", "Trending", "News", "Sports", "Entertainment", "Technology"];
+const predefinedTopics = ["For You", "Trending", "News", "Sports",  "Technology"];
 
 const Page = () => {
   const router = useRouter();
