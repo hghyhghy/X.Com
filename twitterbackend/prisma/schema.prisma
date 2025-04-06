@@ -21,6 +21,8 @@ model User{
   post Post[]
   trendingtopic TrendingTopic[]
   newstopic NewsTopic[]
+  techtopic TechTopic[]
+  posts Posts[]
 }
 
 model Post {
@@ -53,5 +55,27 @@ model  NewsTopic{
   Posts Int  @default(1111)
   createdAt DateTime @default(now())
   userId    Int      // User who generated the news
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model  TechTopic{
+  id  Int  @id  @default(autoincrement())
+  topic String
+  insights Json
+  posts  Int @default(1111)
+  createdAt DateTime @default(now())
+  userId     Int                // User who requested this
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Posts {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  topic     String
+  links     Json?    // Optional links
+  hashtags  String?  // Optional hashtags
+  media     Json?    // Array of media: { type: 'image' | 'video', url: string }
+  createdAt DateTime @default(now())
+  userId    Int
   user      User     @relation(fields: [userId], references: [id])
 }
