@@ -56,7 +56,7 @@ export class PostsService {
       
 
     async getAllPosts(){
-        return   await  this.prisma.posts.findMany({
+        const result =    await  this.prisma.posts.findMany({
             orderBy:{
                 createdAt:'desc'
             },
@@ -64,11 +64,15 @@ export class PostsService {
                 user:{
                     select:{
                         id:true,
-                        username:true
+                        username:true,
+                        email:true
                     }
                 }
             }
         })
+
+        console.log(result)
+        return result
     }
 
     async getUserPosts(userId:number){
