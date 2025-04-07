@@ -13,8 +13,8 @@ type Post={
     topic: string;
     content: string;
     media: { url: string; type: 'image' | 'video' }[];
-    hashtags?: string[];
-    links?: string[];
+    hashtags: string[];
+    links: string[];
     createdAt:string
 }
 
@@ -44,8 +44,14 @@ export default function  PostPage(){
                     },
                     
                 )
+
+                const arraypost  =  response.data.posts.map((post:any) =>  ({
+                    ...post,
+                    hashtags: typeof post.hashtags === 'string' ? JSON.parse(post.hashtags) : post.hashtags,
+                    links: typeof post.links === 'string' ? JSON.parse(post.links) : post.links,
+                }))
         
-                setPosts(response.data.posts.reverse())
+                setPosts(arraypost.reverse())
             } catch (error) {
                 console.error('Failed to fetch error', error)
             }
@@ -63,7 +69,7 @@ export default function  PostPage(){
         const formData  =  new FormData();
         formData.append('topic', topic);
         formData.append('content', content);
-        formData.append('hashtags', JSON.stringify(parseList(hashtags).map((h) => (h.startsWith('#') ? h : `#${h}`))));
+        formData.append('hashtags', JSON.stringify( parseList(hashtags).map((h) => (h.startsWith('#') ? h : `#${h}`))));
         formData.append('links', JSON.stringify(parseList(links)));
         files.forEach((file) => formData.append('media', file));
 
@@ -273,13 +279,12 @@ export default function  PostPage(){
                             {post.content}
                         </div>
                         {Array.isArray(post.hashtags) && 
-                        
-                        post.hashtags.map((tag, index) => (
-                            <span key={index} className="text-blue-500">
-                                {tag}{' '}
-                            </span>
-                        ))
-                        }
+  post.hashtags.map((tag, index) => (
+    <span key={index} className="text-gray-400 mb-1">
+      {tag}{','}
+    </span>
+))
+}
 
                         {post.links && post.links.length > 0 && (
 
@@ -328,19 +333,20 @@ export default function  PostPage(){
 
                                 <div
                                 key={i}
-                                className=' relative  w-32 h-32'
+                                className=' relative'
                                 >
                                     <Image
                                     src={m.url}
+                                    height={420}
+                                    width={520}
                                     alt='media'
-                                    fill
                                     className=' object-cover rounded'
                                     />
                                     <button
-                                     className="absolute top-1 right-1 bg-white text-red-600 text-xs p-1 rounded"
+                                      className="absolute top-1 right-1 bg-black text-white text-lg px-3 py-1 rounded-full cursor-pointer"
                                      onClick={() => handleRemoveMedia(post.id ,  m.url)}
                                     >
-                                        x
+                                        <RxCross1 />
 
                                     </button>
 
