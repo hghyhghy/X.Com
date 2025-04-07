@@ -285,14 +285,17 @@ export default function  PostPage(){
                         <div className=' text-gray-500'>
                             @{post.user.email}
                         </div>
+                        <div className=' text-gray-500 ml-1'>
+                        <div className=' mb-2'>
+                        .{new Date(post.createdAt).toISOString().split('T')[0]}
+                        </div>
+                        </div>
                     </div>
                         <div className="text-sm text-gray-600 mb-1">
                             {post.topic}
                         </div>
-                        <div className=' mb-2'>
-                            {post.content}
-                        </div>
-                        {Array.isArray(post.hashtags) && 
+
+                        {Array.isArray(post.hashtags) &&    
   post.hashtags.map((tag, index) => (
     <span key={index} className="text-gray-400 mb-1">
       {tag}{','}
