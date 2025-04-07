@@ -6,6 +6,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
+import { RxCross1 } from "react-icons/rx";
+import { MdOutlinePermMedia } from "react-icons/md";
 type Post={
     id: number;
     topic: string;
@@ -197,13 +199,22 @@ export default function  PostPage(){
                 className="w-full p-2 border rounded"
 
                 />
+
+                <button
+                onClick={() => fileInputRef.current?.click()}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+
+                >
+                    <MdOutlinePermMedia />
+                </button>
+                
                     <input 
                     ref={fileInputRef}
                     type="file" 
                     multiple
                     accept="image/*,video/*"
                     onChange={handleFileChange}
-                    className='block'
+                    className='hidden'
                     
                     />
 <div className="flex flex-wrap gap-2 mt-2">
@@ -223,12 +234,12 @@ export default function  PostPage(){
           alt="preview"
           className="object-cover rounded-xl"
           />
-        )}
+        )}       
         <button
           onClick={() => handleRemoveSelectedFile(i)}
-          className="absolute top-1 right-1 bg-white text-red-600 text-xs p-1 rounded"
+          className="absolute top-1 right-1 bg-black text-white text-lg px-3 py-1 rounded-full cursor-pointer"
         >
-          x
+          <RxCross1 />
         </button>
       </div>
     );
