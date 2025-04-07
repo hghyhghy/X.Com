@@ -58,7 +58,6 @@ const  Page= () =>{
 
      return (
             <div className="flex min-h-screen h-screen">
-              {/* Sidebar */}
               <div className="w-1/4 min-h-screen">
                 <Sidebar
                   routes={{
