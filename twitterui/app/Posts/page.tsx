@@ -148,6 +148,17 @@ export default function  PostPage(){
         setMediaToAdd(selected)
     }
 
+    const handleRemoveSelectedFile= (index:number) =>{
+        const updatedFile = [...files]
+        const updatedPreview  =  [...filePreviews]
+
+        updatedFile.splice(index,1)
+        updatedPreview.splice(index,1)
+
+        setFiles(updatedFile)
+        setFilePreviews(updatedPreview)
+    }
+
     return(
 
         <div className="max-w-2xl mx-auto p-4">
@@ -195,24 +206,37 @@ export default function  PostPage(){
                     className='block'
                     
                     />
-                    <div className="flex flex-wrap gap-2 mt-2">
+<div className="flex flex-wrap gap-2 mt-2">
   {filePreviews.map((preview, i) => {
     const isVideo = files[i]?.type.startsWith('video');
 
-    return isVideo ? (
-      <video key={i} src={preview} controls className="w-32 rounded" />
-    ) : (
-      <Image
-        key={i}
-        src={preview}
-        alt="preview"
-        width={128}
-        height={128}
-        className="object-cover rounded"
-      />
+    return (
+      <div key={i} className="relative ">
+        {isVideo ? (
+          <video src={preview} controls className="w-32 rounded " />
+        ) : (
+          <Image
+          key={i}
+          src={preview}
+          height={418}
+          width={528}
+          alt="preview"
+          className="object-cover rounded-xl"
+          />
+        )}
+        <button
+          onClick={() => handleRemoveSelectedFile(i)}
+          className="absolute top-1 right-1 bg-white text-red-600 text-xs p-1 rounded"
+        >
+          x
+        </button>
+      </div>
     );
   })}
 </div>
+  
+
+
                 <button
                 onClick={handleCreatePost}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
