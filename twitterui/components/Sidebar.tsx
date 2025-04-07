@@ -7,7 +7,7 @@ import { MdPeople, MdStars } from "react-icons/md";
 import { FaBrain } from "react-icons/fa";
 import Image from "next/image";
 const menuItems = [
-    { name: "Home", icon: <FiHome />, defaultPath: "/" },
+    { name: "Home", icon: <FiHome />, defaultPath: "/main" },
     { name: "Explore", icon: <FiSearch />, defaultPath: "/explore" },
     { name: "Notifications", icon: <FiBell />, defaultPath: "/notifications" },
     { name: "Messages", icon: <FiMail />, defaultPath: "/messages" },
@@ -25,6 +25,7 @@ interface  SidebarProps{
 
 export default function  Sidebar({routes ={}, onNavigate}:SidebarProps){
     const pathname =  usePathname()
+    const router  =  useRouter()
 
     return (
 
@@ -63,7 +64,9 @@ export default function  Sidebar({routes ={}, onNavigate}:SidebarProps){
 
                 </nav>
 
-                <button className="w-full bg-white text-black font-semibold py-3 rounded-full hover:bg-gray-300 transition">
+                <button 
+                onClick={() => router.push('/Posts')}
+                className="w-full bg-white text-black font-semibold py-3 rounded-full hover:bg-gray-300 transition">
                     Post
                 </button>
     </div>
