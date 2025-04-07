@@ -8,8 +8,14 @@ import { v4 as uuid } from 'uuid';
 import Cookies from 'js-cookie';
 import { RxCross1 } from "react-icons/rx";
 import { MdOutlinePermMedia } from "react-icons/md";
+import { MdVerified } from "react-icons/md";
+
 type Post={
     id: number;
+    user:{
+        username:string,
+        email:string
+    },
     topic: string;
     content: string;
     media: { url: string; type: 'image' | 'video' }[];
@@ -271,7 +277,15 @@ export default function  PostPage(){
                     <div
                     key={post.id}
                     className="p-4 border rounded shadow"
-                    >
+                    >  
+                    <div className=' flex flex-row gap-1'>
+                        <div className=' text-gray-300  font-bold  uppercase flex  flex-row'>
+                        {post.user.username} <MdVerified  className=' mt-[0.1rem] ml-1 text-blue-500 text-lg' /> 
+                        </div>
+                        <div className=' text-gray-500'>
+                            @{post.user.email}
+                        </div>
+                    </div>
                         <div className="text-sm text-gray-600 mb-1">
                             {post.topic}
                         </div>
