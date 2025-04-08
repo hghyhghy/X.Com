@@ -167,4 +167,32 @@ export class PostsService {
 
         return updated
     }
+
+
+    async likePost(postId:number){
+      return  this.prisma.posts.update({
+        where:
+        {
+          id:postId
+        },
+        data:{
+          likes:{
+            increment : 1
+          }
+        }
+      })
+    }
+
+    async dislikePosts(postId:number){
+      return this.prisma.posts.update({
+        where:{
+          id:postId
+        },
+        data:{
+          dislikes:{
+            increment:1
+          }
+        }
+      })
+    }
 }
