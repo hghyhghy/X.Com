@@ -70,12 +70,14 @@ model  TechTopic{
 
 model Posts {
   id        Int      @id @default(autoincrement())
-  content   String   @db.Text
-  topic     String
+  content   String?   @db.Text
+  topic     String?
   links     Json?    // Optional links
   hashtags  String?  // Optional hashtags
   media     Json?    // Array of media: { type: 'image' | 'video', url: string }
   createdAt DateTime @default(now())
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  likes     Int  @default(0)
+  dislikes  Int  @default(0)
 }
