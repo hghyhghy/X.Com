@@ -37,10 +37,10 @@ export class PostsService {
       
           const newPost = await this.prisma.posts.create({
             data: {
-              content,
-              topic,
-              hashtags,
-              links: parsedLinks,
+              content: content?content:null,
+              topic: topic ? topic : null,
+              hashtags:hashtags ? hashtags:null,
+              links: parsedLinks ? parsedLinks : null,
               media: parsedMedia,
               userId: userId,
             },
