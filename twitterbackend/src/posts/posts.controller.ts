@@ -235,6 +235,17 @@ async addMediaToPost(
   }
 }
 
+ @Patch('like/:id')
+ async  likepost(@Param('id') id:string){
+  const numberid =  parseInt(id,10)
+  return  this.postsservice.likePost(numberid)
+ }
+
+ @Patch('dislike/:id')
+ async dislikepost(@Param('id') id:string){
+  const numberid =  parseInt(id,10)
+  return  this.postsservice.dislikePosts(numberid)
+ }
 
   
 }
