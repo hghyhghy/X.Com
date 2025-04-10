@@ -71,6 +71,20 @@ export default function  Myposts(){
         }
     }
 
+    const handledelete  =  async(postId:number) => {
+        try {
+            await axios.patch(`${api}/dislike/${postId}` , {} , {
+                headers:{
+                    Authorization:`Bearer ${token}`
+                },
+                withCredentials:true
+            })
+            fetchPosts()
+        } catch (error) {
+            console.log('Error disliking post', error)
+        }
+    }
+
     return(
                     <div className=" min-h-screen relative">
                              <div className="absolute -left-0 top-0 bottom-0 w-px bg-gray-600 min-h-screen " />
