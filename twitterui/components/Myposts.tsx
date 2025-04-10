@@ -16,7 +16,9 @@ type Post={
     media: { url: string; type: 'image' | 'video' }[];
     hashtags: string[];
     links: string[];
-    createdAt:string
+    createdAt:string;
+    likes:number;
+    dislikes:number;
 }
 
 
@@ -49,6 +51,23 @@ export default function  Myposts(){
             setPosts(arraypost.reverse())
         } catch (error) {
             console.log('Failed to fetch posts',error)
+        }
+    }
+
+    const handleLike =  async(postId:number) => {
+        try {
+            
+            await axios.patch(`${api}/like/${postId}`, {}, {
+                headers:{
+                    Authorization:`Bearer ${token}`
+                },
+                withCredentials:true
+            })
+
+            fetchPosts();
+
+        } catch (error) {
+            console.log('Error fetching likes ', error)
         }
     }
 
