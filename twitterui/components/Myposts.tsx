@@ -5,6 +5,8 @@ import Image from "next/image";
 import axios from "axios";
 import { MdVerified } from "react-icons/md";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { AiOutlineDislike } from "react-icons/ai";
+import { CiHeart } from "react-icons/ci";
 type Post={
     id: number;
     user:{
@@ -71,7 +73,7 @@ export default function  Myposts(){
         }
     }
 
-    const handledelete  =  async(postId:number) => {
+    const handledislike  =  async(postId:number) => {
         try {
             await axios.patch(`${api}/dislike/${postId}` , {} , {
                 headers:{
@@ -192,7 +194,10 @@ export default function  Myposts(){
         
         
                                         </div>
+                                        
                                     )
+
+                                    
                                     )}
         
                                 </div>
@@ -203,15 +208,44 @@ export default function  Myposts(){
 
         
                                 </div>
-{/*         
-                                <button
-                                onClick={() => handleDeletePost(post.id)}
-                                className="text-red-500 mt-2 text-sm"
-                                >
-                                    Delete Post
-                                </button> */}
+                                    <div className=" flex flex-row gap-3 mt-4">
+                                        <div className=" flex flex-row gap-1">
+                                        <div>
+
+                                        <button
+                                        onClick={() => handleLike(post.id)}
+                                        className=" cursor-pointer"
+                                        >
+                                            <CiHeart className=" text-xl " />
+                                        </button>
+                                            </div>
+                                            <div className=" text-gray-500  cursor-pointer">
+                                            {post.likes}K
+                                            </div>
+                                            </div>
+
+                                         <div className=" flex flex-row">
+                                            <div className=" mt-1">
+                                            <button
+                                        onClick={() => handledislike(post.id)}
+                                        className=" cursor-pointer"
+
+                                        >
+                                                <AiOutlineDislike className=" text-xl" />
+
+                                        </button>
+                                
+                                            </div>
+                                            <div className=" text-gray-500  cursor-pointer">
+                                            {post.dislikes}K    
+                                            </div>    
+                                        </div>   
+
+                                    </div>
         
                             </div>
+
+                            
                         ))}
       </div>
 
