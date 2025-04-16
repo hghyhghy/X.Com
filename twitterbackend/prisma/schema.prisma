@@ -23,6 +23,8 @@ model User{
   newstopic NewsTopic[]
   techtopic TechTopic[]
   posts Posts[]
+  bookmark Bookmark[]
+
 }
 
 model Post {
@@ -80,4 +82,16 @@ model Posts {
   user      User     @relation(fields: [userId], references: [id])
   likes     Int  @default(0)
   dislikes  Int  @default(0)
+  bookmark Bookmark[]
+}
+
+model  Bookmark{
+  id Int @id @default(autoincrement())
+  userId  Int
+  postId  Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  post      Posts    @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
 }
