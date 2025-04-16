@@ -12,9 +12,10 @@ import { NewsModule } from './news/news.module';
 import { TechGeminiService } from './tech-gemini/tech-gemini.service';
 import { TechnologyModule } from './technology/technology.module';
 import { PostsModule } from './posts/posts.module';
+import { BookmarksModule } from './bookmarks/bookmarks.module';
 
 @Module({
-  imports: [ AuthModule, ExploreModule, TrendingModule, NewsModule, TechnologyModule, PostsModule],
+  imports: [ AuthModule, ExploreModule, TrendingModule, NewsModule, TechnologyModule, PostsModule, BookmarksModule],
   controllers: [AppController],
   providers: [AppService,PrismaService, GeminiService, TrendingGeminiService, NewsGeminiService, TechGeminiService],
 })
