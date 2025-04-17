@@ -21,7 +21,9 @@ type Post = {
     media:{ url: string; type: 'image' | 'video' }[],
     hashtags:string[],
     links:string[],
-    createdAt:string
+    createdAt:string,
+    likes:number,
+    dislikes:number
 }
 const fetchUser = async (url: string, token: string) => {
   const response = await fetch(url, {
@@ -38,16 +40,22 @@ const fetchUser = async (url: string, token: string) => {
   return response.json();
 };
 
-export  default  function  Profile(){
 
+
+
+export  default  function  Profile(){
+  
+    const api = 'http://localhost:3001/posts'; 
     const [bookmarkedPosts, setbookmarkedPosts] = useState<Post[]>([])
+    const [posts, setPosts] = useState <Post[]>([])
+    
     const token  =  Cookies.get('token')
     const router =    useRouter()
     const customRoutes = useMemo(
       () => ({
         Home: "/main",
         Explore: "/Explore",
-        Notifications: "/alerts",
+        Notifications: "/alerts", 
         Messages: "/chat",
         Grok: "/ai",
         Communities: "/groups",
@@ -69,6 +77,56 @@ export  default  function  Profile(){
 
   if (error) {
     console.error("Error fetching user:", error);
+  }
+
+  const  fetchPosts = async() => {
+
+    try {
+        
+        const   resposne  =  await axios.get(`${api}/all`, {
+            headers:{
+                Authorization:`Bearer ${token}`
+            },
+            withCredentials:true
+        })
+        const  arraypost  =   resposne.data.posts.map((post:any) => ({
+            ...post,
+            hashtags:typeof post.hashtags === 'string'? JSON.parse(post.hashtags):post.hashtags,
+            links:typeof post.links === 'string'? JSON.parse(post.links):post.links
+
+        }))
+
+        setPosts(arraypost.reverse())
+    } catch (error) {
+        console.log('Failed to fetch posts',error)
+    }
+}
+
+  const  handleLike =  async(postId:number)=>{
+    try {
+      
+      await  axios.patch(`${api}/like/${postId}`, {} ,{
+        headers:{
+          Authorization:`Bearer  ${token}`
+        }
+      })
+      fetchPosts()
+    } catch (error) {
+      console.error('error adding  likes', error)
+    }
+  }
+
+  const  handledislike =  async(postId:number) => {
+    try {
+      await  axios.patch(`${api}/dislike/${postId}` , {}, {
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+      fetchPosts()
+    } catch (error) {
+      console.error('error disliking  post', error)
+    }
   }
 
 
