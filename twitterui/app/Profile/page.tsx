@@ -12,6 +12,8 @@ import Userprofile from "@/components/Userprofile";
 import useSWR from "swr";
 import { AiOutlineDislike } from "react-icons/ai";
 import { CiHeart } from "react-icons/ci";
+import { CiBookmark } from "react-icons/ci";
+
 type Post = {
     id:number,
     user:{
@@ -131,6 +133,20 @@ export  default  function  Profile(){
     }
   }
 
+  const  handleremovebookmark  = async(postId:number)=>{
+    try {
+      await axios.delete(`http://localhost:3001/bookmarks/${postId}`, {
+        headers:{
+          Authorization:`Bearer ${token}`
+        },
+        withCredentials:true
+       });
+       console.log('bookmark removed ')
+    } catch (error) {
+      console.error('error removing bookmark', error)
+    }
+  }
+
 
     const fetchBookmarkedPosts =  async() => {
         try {
@@ -177,6 +193,16 @@ user={user ? { ...user, avatarUrl: <FaCircleUser  size={40} color="#4A90E2" />
               key={post.id}
               className="p-8 mb-4 rounded border border-gray-700 shadow relative "
             >
+                  <button
+      onClick={() => {
+        handleremovebookmark(post.id);
+        setbookmarkedPosts(prev => prev.filter(p =>  p.id !== post.id))
+      }}
+      className="absolute top-4 right-4 text-xl text-white hover:text-red-500"
+      title="Remove Bookmark"
+    >
+      <CiBookmark />
+    </button>
               <div className="flex items-center gap-2 text-gray-300 font-bold uppercase">
                 <FaRegCircleUser className="text-2xl" />
                 {post.user.username}
@@ -240,16 +266,19 @@ user={user ? { ...user, avatarUrl: <FaCircleUser  size={40} color="#4A90E2" />
                 </div>
               )}
           <div className=" mt-2 flex flex-row  gap-3">
-            <div>
+            <div className=" flex flex-row gap-1">
             <button 
             onClick={() =>handleLike(post.id)}
             className=" text-xl cursor-pointer"
             >
             <CiHeart/>
             </button>  
+            <div>
+              {post.likes}K
+            </div>
 
             </div>
-            <div>
+            <div className=" flex flex-row gap-1">
               <button
               onClick={()=> handledislike(post.id)}
               className=" text-xl cursor-pointer"
@@ -257,11 +286,17 @@ user={user ? { ...user, avatarUrl: <FaCircleUser  size={40} color="#4A90E2" />
                 
               <AiOutlineDislike/>
               </button>
+              <div>
+                {post.dislikes}K
+              </div>
             </div>
           </div>
             </div>
             
           ))}
+
+          {/* bookmark  section  */}
+
 
 
 </div>
