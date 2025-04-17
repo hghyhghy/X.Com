@@ -4,10 +4,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
-import { FaRegCircleUser } from "react-icons/fa6";
+import { FaCircleUser, FaRegCircleUser } from "react-icons/fa6";
 import Sidebar from "@/components/Sidebar";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Userprofile from "@/components/Userprofile";
+import useSWR from "swr";
 type Post = {
     id:number,
     user:{
@@ -21,6 +23,20 @@ type Post = {
     links:string[],
     createdAt:string
 }
+const fetchUser = async (url: string, token: string) => {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch user data");
+  }
+  return response.json();
+};
 
 export  default  function  Profile(){
 
@@ -45,6 +61,16 @@ export  default  function  Profile(){
     useEffect(()=>{
         fetchBookmarkedPosts()
     },[])
+      // Use SWR for better performance
+  const { data: user, error } = useSWR(
+    token ? "http://localhost:3001/auth/me" : null,
+    (url) => fetchUser(url, token as string)
+  );
+
+  if (error) {
+    console.error("Error fetching user:", error);
+  }
+
 
     const fetchBookmarkedPosts =  async() => {
         try {
@@ -71,16 +97,25 @@ export  default  function  Profile(){
     }
 
     return (
-        <div className="min-h-screen p-4 flex flex-row bg-black">
+        <div className="min-h-screen  flex flex-row bg-black relative">
                 <section className=" px-30" >
                   <Sidebar routes={customRoutes} onNavigate={(path) =>  router.push(path)} />
-          
+                  <div className="-mt-39">
+
+<Userprofile
+user={user ? { ...user, avatarUrl: <FaCircleUser  size={40} color="#4A90E2" />   
+} : null}
+/>
+</div>
                 </section>
-    
+   
+                <div className="max-h-screen overflow-y-auto px-1 relative right-32">
+
+
           {bookmarkedPosts.map((post) => (
             <div
               key={post.id}
-              className="p-6 mb-4 rounded border border-gray-700 shadow"
+              className="p-8 mb-4 rounded border border-gray-700 shadow relative "
             >
               <div className="flex items-center gap-2 text-gray-300 font-bold uppercase">
                 <FaRegCircleUser className="text-2xl" />
@@ -146,6 +181,9 @@ export  default  function  Profile(){
               )}
             </div>
           ))}
+
+</div>
+    
         </div>
       );
 
