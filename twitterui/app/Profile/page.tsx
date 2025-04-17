@@ -10,6 +10,8 @@ import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Userprofile from "@/components/Userprofile";
 import useSWR from "swr";
+import { AiOutlineDislike } from "react-icons/ai";
+import { CiHeart } from "react-icons/ci";
 type Post = {
     id:number,
     user:{
@@ -237,8 +239,30 @@ user={user ? { ...user, avatarUrl: <FaCircleUser  size={40} color="#4A90E2" />
                   )}
                 </div>
               )}
+          <div className=" mt-2 flex flex-row  gap-3">
+            <div>
+            <button 
+            onClick={() =>handleLike(post.id)}
+            className=" text-xl cursor-pointer"
+            >
+            <CiHeart/>
+            </button>  
+
             </div>
+            <div>
+              <button
+              onClick={()=> handledislike(post.id)}
+              className=" text-xl cursor-pointer"
+              >
+                
+              <AiOutlineDislike/>
+              </button>
+            </div>
+          </div>
+            </div>
+            
           ))}
+
 
 </div>
     
