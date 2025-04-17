@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { BsThreeDots } from "react-icons/bs";
 
 const API_URL = "http://localhost:3001";
-const predefinedTopics = ["For You", "Trending", "News", "Sports", "Entertainment", "Technology"];
+const predefinedTopics = ["For You","Trending","News","Sports","Technology"];
 
 const  Page = () => {
     const router   =  useRouter()
@@ -61,14 +61,14 @@ const  Page = () => {
           <div className="w-1/4 min-h-screen">
             <Sidebar
               routes={{
-                Home: "/home",
+                Home: "/main",
                 Explore: "/Explore",
                 Notifications: "/alerts",
                 Messages: "/chat",
                 Grok: "/ai",
                 Communities: "/groups",
                 Premium: "/membership",
-                Profile: "/user/me",
+                Profile: "/Profile",
                 More: "/settings",
               }}
               onNavigate={(path) => router.push(path)}
